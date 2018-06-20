@@ -1,12 +1,24 @@
 $(function(){
-   
-$("#search1").focus(function(){
-    $(this).addClass("largeInput")
-})
+    var topics = ["Charlie Bit Me","Grumpy Cat","Doge","SpongeBob","Success Kid","Pepe The Frog"]
 
-    $("#search1").focusout(function () {
-        $(this).removeClass("largeInput")
-    })
+    for(i = 0; i < topics.length; i++)
+    {
+        var button = $("<button>")
+        button.attr({
+            "class": "btn btn-primary m-2 searchPress",
+            "imagesearch": topics[i]
+        })
+        button.append(topics[i])
+        $("#buttonsDiv").append(button)
+    }
+   
+// $("#search1").focus(function(){
+//     $(this).addClass("largeInput")
+// })
+
+    // $("#search1").focusout(function () {
+    //     $(this).removeClass("largeInput")
+    // })
 
 $("#newButton").on("click",function(){
     event.preventDefault();
@@ -23,7 +35,25 @@ $("#newButton").on("click",function(){
         $("#buttonsDiv").append(button)
     }
    
-    
+
+})
+
+$(document).on("click", ".image", function(){
+    state = $(this).attr("state")
+
+    if(state === "still"){
+        $(this).attr({
+        src: $(this).attr("data-animated")
+        
+    })
+        $(this).attr("state", "animated")
+    }
+    else{
+        $(this).attr({
+            src: $(this).attr("data-still")
+        })
+        $(this).attr("state", "still")
+    }
 })
 
     function capitalize(string) {
@@ -36,8 +66,13 @@ $("#newButton").on("click",function(){
       
 
         $.ajax({
-            'url': "http://api.giphy.com/v1/gifs/search?q=" + search +"&api_key=nOUQQSqUzlClU2q2HkVzVCYIH3KwVhsc",
-            'method': "GET"
+            'url': "http://api.giphy.com/v1/gifs/search?",
+            'method': "GET",
+            data:{
+                q: search,
+                api_key: "nOUQQSqUzlClU2q2HkVzVCYIH3KwVhsc",
+                limit: "10"
+            }
         }).then(function (response) {
             
             var items = response.data
@@ -49,12 +84,16 @@ $("#newButton").on("click",function(){
                 card.attr({
                     class: "card d-inline-block m-2",
                     style: "width: 250px;"
+                  
                 })
 
                 var image = $("<img>")
                 image.attr({
-                    src: items[i].images.fixed_height.url,
-                    class: "card-img-top"
+                    src: items[i].images.fixed_height_still.url,
+                    class: "card-img-top image",
+                    "data-still": items[i].images.fixed_height_still.url,
+                    "data-animated": items[i].images.fixed_height.url,
+                    state: "still"
                 })
 
                 var cardBody = $("<div>")
