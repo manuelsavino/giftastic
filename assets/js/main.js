@@ -66,7 +66,7 @@ $(document).on("click", ".image", function(){
       
 
         $.ajax({
-            'url': "http://api.giphy.com/v1/gifs/search?",
+            'url': "https://api.giphy.com/v1/gifs/search?",
             'method': "GET",
             data:{
                 q: search,
